@@ -11,8 +11,9 @@
         android:id="@+id/iv_chat_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@color/surface_light"
+        android:background="@drawable/circle_icon_bg"
         android:scaleType="centerCrop"
+        android:clipToOutline="true"
         android:contentDescription="Chat icon" />
 
     <LinearLayout
