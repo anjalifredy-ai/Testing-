@@ -3,6 +3,7 @@ package com.rikky.blankct.ui.chats
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.ValueEventListener
+import com.rikky.blankct.ChatActivity
 import com.rikky.blankct.R
 import com.rikky.blankct.data.AuthManager
 import com.rikky.blankct.data.ChatRepository
@@ -31,8 +33,10 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list) {
 
         rv.layoutManager = LinearLayoutManager(requireContext())
         adapter = ChatAdapter(emptyList()) { chat: ChatSummary ->
-            Toast.makeText(requireContext(), "Opening ${chat.title}", Toast.LENGTH_SHORT).show()
-            // ChatActivity will open here in the next step
+            val intent = Intent(requireContext(), ChatActivity::class.java)
+            intent.putExtra("chatId", chat.chatId)
+            intent.putExtra("chatTitle", chat.title)
+            startActivity(intent)
         }
         rv.adapter = adapter
 
