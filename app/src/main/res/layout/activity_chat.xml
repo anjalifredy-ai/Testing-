@@ -38,14 +38,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:background="@color/surface_dark"
-        android:padding="8dp">
+        android:background="@color/dark_bg"
+        android:padding="10dp">
 
         <ImageButton
             android:id="@+id/btn_attach"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:background="@android:color/transparent"
+            android:background="@drawable/circle_icon_bg"
             android:src="@drawable/ic_add"
             app:tint="@color/tiktok_cyan"
             android:contentDescription="Attach" />
@@ -58,15 +58,15 @@
             android:hint="Message..."
             android:textColorHint="@color/text_secondary"
             android:textColor="@color/white"
-            android:background="@color/surface_light"
-            android:padding="10dp"
-            android:layout_marginHorizontal="6dp" />
+            android:background="@drawable/bubble_received"
+            android:padding="12dp"
+            android:layout_marginHorizontal="8dp" />
 
         <ImageButton
             android:id="@+id/btn_send"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:background="@color/tiktok_red"
+            android:background="@drawable/bubble_gradient_sent"
             android:src="@drawable/ic_chat"
             android:contentDescription="Send" />
 
