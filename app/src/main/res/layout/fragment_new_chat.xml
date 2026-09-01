@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/dark_bg"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start New Chat"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp" />
+
+    <EditText
+        android:id="@+id/et_friend_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter friend's ID"
+        android:textColorHint="@color/text_secondary"
+        android:textColor="@color/white"
+        android:background="@color/surface_dark"
+        android:padding="14dp"
+        android:inputType="textCapCharacters" />
+
+    <Button
+        android:id="@+id/btn_start_chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Start Chat"
+        android:backgroundTint="@color/tiktok_red"
+        android:textColor="@color/white" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/btn_new_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create New Group"
+        android:backgroundTint="@color/surface_light"
+        android:textColor="@color/white" />
+
+</LinearLayout>
