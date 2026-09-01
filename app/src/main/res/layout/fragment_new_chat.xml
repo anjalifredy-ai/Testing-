@@ -69,8 +69,9 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_gravity="center_horizontal"
-        android:background="@color/surface_light"
+        android:background="@drawable/circle_icon_bg"
         android:scaleType="centerCrop"
+        android:clipToOutline="true"
         android:contentDescription="Group icon" />
 
     <TextView
