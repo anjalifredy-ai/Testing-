@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/dark_bg">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/dark_bg"
     android:padding="20dp">
 
     <TextView
@@ -35,6 +39,15 @@
         android:backgroundTint="@color/tiktok_red"
         android:textColor="@color/white" />
 
+    <Button
+        android:id="@+id/btn_self_chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Message Yourself"
+        android:backgroundTint="@color/surface_light"
+        android:textColor="@color/white" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -42,12 +55,53 @@
         android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create New Group"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="14dp" />
+
+    <ImageView
+        android:id="@+id/iv_group_icon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/surface_light"
+        android:scaleType="centerCrop"
+        android:contentDescription="Group icon" />
+
+    <TextView
+        android:id="@+id/tv_pick_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:text="Tap to add icon"
+        android:textColor="@color/tiktok_cyan"
+        android:textSize="13sp" />
+
+    <EditText
+        android:id="@+id/et_group_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:hint="Group name"
+        android:textColorHint="@color/text_secondary"
+        android:textColor="@color/white"
+        android:background="@color/surface_dark"
+        android:padding="14dp" />
+
     <Button
         android:id="@+id/btn_new_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create New Group"
+        android:layout_marginTop="16dp"
+        android:text="Create Group"
         android:backgroundTint="@color/surface_light"
         android:textColor="@color/white" />
 
 </LinearLayout>
+</ScrollView>
