@@ -36,6 +36,10 @@ class ChatsListFragment : Fragment(R.layout.fragment_chats_list) {
             val intent = Intent(requireContext(), ChatActivity::class.java)
             intent.putExtra("chatId", chat.chatId)
             intent.putExtra("chatTitle", chat.title)
+            if (!chat.isGroup) {
+                val otherUid = chat.memberIds.firstOrNull { it != myUid } ?: ""
+                intent.putExtra("otherUid", otherUid)
+            }
             startActivity(intent)
         }
         rv.adapter = adapter
