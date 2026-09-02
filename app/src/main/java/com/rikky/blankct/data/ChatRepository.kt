@@ -75,6 +75,25 @@ object ChatRepository {
         db.child("chats").child(chatId).child("lastTimestamp").setValue(System.currentTimeMillis())
     }
 
+    fun sendAudioMessage(chatId: String, senderId: String, audioBase64: String) {
+        val msgId = db.child("chats").child(chatId).child("messages").push().key ?: return
+        val message = ChatMessage(
+            id = msgId,
+            senderId = senderId,
+            type = "audio",
+            audioBase64 = audioBase64,
+            timestamp = System.currentTimeMillis()
+        )
+        db.child("chats").child(chatId).child("messages").child(msgId).setValue(message)
+        db.child("chats").child(chatId).child("lastMessage").setValue("🎤 Voice message")
+        db.child("chats").child(chatId).child("lastTimestamp").setValue(System.currentTimeMillis())
+    }
+
+    fun markMessageSeen(chatId: String, messageId: String, myUid: String) {
+        db.child("chats").child(chatId).child("messages").child(messageId)
+            .child("seenBy").child(myUid).setValue(true)
+    }
+
     fun listenToMessages(chatId: String, onMessages: (List<ChatMessage>) -> Unit): ValueEventListener {
         val ref = db.child("chats").child(chatId).child("messages")
         val listener = object : ValueEventListener {
@@ -115,6 +134,45 @@ object ChatRepository {
                     }
                 }
                 onChats(list.sortedByDescending { it.lastTimestamp })
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        }
+        ref.addValueEventListener(listener)
+        return listener
+    }
+
+    fun saveMyProfile(myUid: String, displayName: String, iconBase64: String) {
+        db.child("users").child(myUid).child("displayName").setValue(displayName)
+        if (iconBase64.isNotEmpty()) {
+            db.child("users").child(myUid).child("iconBase64").setValue(iconBase64)
+        }
+    }
+
+    fun fetchUserProfile(uid: String, onResult: (UserProfile?) -> Unit) {
+        db.child("users").child(uid).get()
+            .addOnSuccessListener { snapshot ->
+                val profile = UserProfile(
+                    uid = uid,
+                    shortId = snapshot.child("shortId").getValue(String::class.java) ?: "",
+                    displayName = snapshot.child("displayName").getValue(String::class.java) ?: "",
+                    iconBase64 = snapshot.child("iconBase64").getValue(String::class.java) ?: ""
+                )
+                onResult(profile)
+            }
+            .addOnFailureListener { onResult(null) }
+    }
+
+    fun listenToUserProfile(uid: String, onUpdate: (UserProfile) -> Unit): ValueEventListener {
+        val ref = db.child("users").child(uid)
+        val listener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val profile = UserProfile(
+                    uid = uid,
+                    shortId = snapshot.child("shortId").getValue(String::class.java) ?: "",
+                    displayName = snapshot.child("displayName").getValue(String::class.java) ?: "",
+                    iconBase64 = snapshot.child("iconBase64").getValue(String::class.java) ?: ""
+                )
+                onUpdate(profile)
             }
             override fun onCancelled(error: DatabaseError) {}
         }
