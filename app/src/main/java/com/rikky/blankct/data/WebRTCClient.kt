@@ -59,9 +59,11 @@ class WebRTCClient(
     fun createOffer(onSuccess: (SessionDescription) -> Unit) {
         val constraints = MediaConstraints()
         peerConnection?.createOffer(object : SdpObserverAdapter() {
-            override fun onCreateSuccess(desc: SessionDescription) {
-                peerConnection?.setLocalDescription(SdpObserverAdapter(), desc)
-                onSuccess(desc)
+            override fun onCreateSuccess(desc: SessionDescription?) {
+                if (desc != null) {
+                    peerConnection?.setLocalDescription(SdpObserverAdapter(), desc)
+                    onSuccess(desc)
+                }
             }
         }, constraints)
     }
@@ -69,9 +71,11 @@ class WebRTCClient(
     fun createAnswer(onSuccess: (SessionDescription) -> Unit) {
         val constraints = MediaConstraints()
         peerConnection?.createAnswer(object : SdpObserverAdapter() {
-            override fun onCreateSuccess(desc: SessionDescription) {
-                peerConnection?.setLocalDescription(SdpObserverAdapter(), desc)
-                onSuccess(desc)
+            override fun onCreateSuccess(desc: SessionDescription?) {
+                if (desc != null) {
+                    peerConnection?.setLocalDescription(SdpObserverAdapter(), desc)
+                    onSuccess(desc)
+                }
             }
         }, constraints)
     }
