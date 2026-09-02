@@ -1,12 +1,17 @@
 package com.rikky.blankct
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.rikky.blankct.data.*
 import org.webrtc.IceCandidate
 import org.webrtc.SessionDescription
@@ -38,6 +43,8 @@ class CallActivity : AppCompatActivity() {
     private lateinit var btnMute: ImageView
     private lateinit var btnSpeaker: ImageView
 
+    private val RECORD_AUDIO_REQUEST_CODE = 101
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_call)
@@ -60,6 +67,37 @@ class CallActivity : AppCompatActivity() {
 
         tvName.text = otherName
 
+        btnAccept.setOnClickListener { acceptIncomingCall() }
+        btnReject.setOnClickListener { rejectCall() }
+        btnEndCall.setOnClickListener { endCallAndFinish() }
+        btnMute.setOnClickListener { toggleMute() }
+        btnSpeaker.setOnClickListener { toggleSpeaker() }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.RECORD_AUDIO), RECORD_AUDIO_REQUEST_CODE
+            )
+        } else {
+            setupCall()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == RECORD_AUDIO_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                setupCall()
+            } else {
+                Toast.makeText(this, "Mic permission needed to call", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+    }
+
+    private fun setupCall() {
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
         setSpeaker(true)
@@ -90,12 +128,6 @@ class CallActivity : AppCompatActivity() {
         } else {
             startAsCallee()
         }
-
-        btnAccept.setOnClickListener { acceptIncomingCall() }
-        btnReject.setOnClickListener { rejectCall() }
-        btnEndCall.setOnClickListener { endCallAndFinish() }
-        btnMute.setOnClickListener { toggleMute() }
-        btnSpeaker.setOnClickListener { toggleSpeaker() }
     }
 
     private fun startAsCaller() {
@@ -175,7 +207,6 @@ class CallActivity : AppCompatActivity() {
     private fun toggleMute() {
         isMuted = !isMuted
         webRTCClient.setMuted(isMuted)
-        btnMute.setImageResource(if (isMuted) R.drawable.ic_mic_off else R.drawable.ic_mic_off)
         btnMute.alpha = if (isMuted) 0.5f else 1.0f
     }
 
@@ -196,15 +227,15 @@ class CallActivity : AppCompatActivity() {
 
     private fun finishCall(reason: String) {
         timerJob?.cancel()
-        webRTCClient.close()
-        audioManager.mode = AudioManager.MODE_NORMAL
+        if (::webRTCClient.isInitialized) webRTCClient.close()
+        if (::audioManager.isInitialized) audioManager.mode = AudioManager.MODE_NORMAL
         finish()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         timerJob?.cancel()
-        webRTCClient.close()
-        audioManager.mode = AudioManager.MODE_NORMAL
+        if (::webRTCClient.isInitialized) webRTCClient.close()
+        if (::audioManager.isInitialized) audioManager.mode = AudioManager.MODE_NORMAL
     }
 }
