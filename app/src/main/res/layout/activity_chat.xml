@@ -24,6 +24,15 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
+        <ImageButton
+            android:id="@+id/btn_call"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/circle_icon_bg"
+            android:src="@drawable/ic_call_accept"
+            app:tint="@color/tiktok_cyan"
+            android:contentDescription="Call" />
+
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
