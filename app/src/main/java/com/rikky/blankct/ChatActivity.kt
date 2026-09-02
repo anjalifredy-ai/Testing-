@@ -21,6 +21,8 @@ class ChatActivity : AppCompatActivity() {
 
     private var messagesListener: ValueEventListener? = null
     private lateinit var chatId: String
+    private var otherUid: String = ""
+    private var chatTitle: String = "Chat"
     private lateinit var adapter: MessageAdapter
     private lateinit var rv: RecyclerView
 
@@ -44,12 +46,14 @@ class ChatActivity : AppCompatActivity() {
         setContentView(R.layout.activity_chat)
 
         chatId = intent.getStringExtra("chatId") ?: ""
-        val chatTitle = intent.getStringExtra("chatTitle") ?: "Chat"
+        chatTitle = intent.getStringExtra("chatTitle") ?: "Chat"
+        otherUid = intent.getStringExtra("otherUid") ?: ""
 
         val tvTitle = findViewById<TextView>(R.id.tv_chat_header_title)
         val etMessage = findViewById<EditText>(R.id.et_message)
         val btnSend = findViewById<ImageButton>(R.id.btn_send)
         val btnAttach = findViewById<ImageButton>(R.id.btn_attach)
+        val btnCall = findViewById<ImageButton>(R.id.btn_call)
         rv = findViewById(R.id.rv_messages)
 
         tvTitle.text = chatTitle
@@ -78,6 +82,20 @@ class ChatActivity : AppCompatActivity() {
         btnAttach.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             pickImageLauncher.launch(intent)
+        }
+
+        btnCall.setOnClickListener {
+            if (otherUid.isEmpty()) {
+                android.widget.Toast.makeText(this, "Cannot call in this chat", android.widget.Toast.LENGTH_SHORT).show()
+            } else {
+                val callId = "call_${System.currentTimeMillis()}"
+                val callIntent = Intent(this, CallActivity::class.java)
+                callIntent.putExtra("callId", callId)
+                callIntent.putExtra("otherUid", otherUid)
+                callIntent.putExtra("otherName", chatTitle)
+                callIntent.putExtra("isCaller", true)
+                startActivity(callIntent)
+            }
         }
     }
 
